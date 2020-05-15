@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on Portfolio Project 3</title>
+    <link>/blog/</link>
+    <description>Recent content in Blogs on Portfolio Project 3</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 15 May 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>My New Post</title>
+      <link>/blog/my-new-post/</link>
+      <pubDate>Fri, 15 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/my-new-post/</guid>
+      <description>  #This is a python code chunk x=[&amp;#39;p&amp;#39;, &amp;#39;y&amp;#39;, &amp;#39;t&amp;#39;, &amp;#39;h&amp;#39;, &amp;#39;o&amp;#39;, &amp;#39;n&amp;#39;] x[2:4] ## [&amp;#39;t&amp;#39;, &amp;#39;h&amp;#39;] library(reticulate) #this is an R code chunk py$x ## [1] &amp;quot;p&amp;quot; &amp;quot;y&amp;quot; &amp;quot;t&amp;quot; &amp;quot;h&amp;quot; &amp;quot;o&amp;quot; &amp;quot;n&amp;quot; </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,78 @@
+---
+title: "Project 1"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+date: '2020-05-13'
+---
+
+##Introduction
+##The data sets I have chosen are all related to the NBA. I thought it would be very interesting if I were to gather data regarding past NBA Champions. I found these data online through different websites. I wanted to find associations regarding awards that were given that year in regard to who the champions were. This information is interesting to me because I have always been a huge basketball fan.
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(tidyverse)
+NBA_Finals<-read_excel("NBA Finals.xlsx")
+NBA_Awards<-read_excel("NBA Awards.xlsx")
+NBA_Finals
+NBA_Awards
+NBA_Finals%>%pivot_wider(names_from="NBA Champion",values_from="Year")
+```
+ ## I untidied the data by using pivot wider and tidied again by using pivot longer.
+
+
+```{r}
+NBA_Finals %>% full_join(NBA_Awards)
+NBAfinalawards <- NBA_Finals %>% full_join(NBA_Awards)
+```
+No variables in this join were dropped. I chose this join because I want all the variables to be included in the joined dataset.
+
+```{r}
+NBAfinalawards  %>% filter(`MVP status`=="Champion")
+NBAfinalawards %>% arrange(`Champ-Wins`)
+NBAfinalawards %>% select(Year,`NBA Champion`,`MVP Name`,`MVP Team`)
+NBAfinalawards$`Champ-Wins` <- as.numeric(NBAfinalawards$`Champ-Wins`)
+NBAfinalawards <- NBAfinalawards %>% mutate(champwinratio = `Champ-Wins`/ (`Champ-Wins` + `Champ-Losses`))
+
+NBAfinalawards %>% summarize(mean(`Champ-Wins`))                                            
+NBAfinalawards %>% summarize(sd(`Champ-Wins`))                                            
+NBAfinalawards %>% summarize(max(`Champ-Wins`))  
+NBAfinalawards %>% filter(`NBA Champion`== "Los Angeles Lakers") %>% summarize(mean(`Champ-Wins`))
+NBAfinalawards %>% group_by(`MVP Team`) %>% summarize(median(champwinratio))
+NBAfinalawards %>% group_by(`MVP Position`) %>% summarize(mean(champwinratio))
+NBAfinalawards %>% group_by(`NBA Champion`,Loser) %>% summarize(median(champwinratio))
+NBAfinalawards %>% summarize(max(`Loser-Wins`))
+NBAfinalawards %>% summarize(min(`Champ-Wins`))
+NBAfinalawards %>% filter(`MVP Name` == "S. Curry") %>% summarize(max(`Champ-Wins`))
+NBAfinalawards %>% filter(`MVP Name` == "S. Curry") %>% summarize(mean(`Champ-Wins`))
+```
+
+In the first function, I found what mean number of regular season wins was for a NBA champion. In the second function, I found out what the standard deviation of regular seaason wins was for NBA champion. In the third function, I found out what the maximum number of regular season wins was for a NBA Champion. In the fourth function, I found the mean number of wins for the Lakers whent they won a championship. In the fifth function, I found the median winratio for every MVP Team. In the sixth function, I found the winratio for championships in every MVP position which were guards. I also found that the Celtics had the highest championship win ratio. The most wins for a losing team was 73 games in 2016. The least number of wins for a championship team was 37.                                                                  
+```{r}
+df <- NBAfinalawards %>% select_if(is.numeric)
+cor(df)
+tidycor <- cor(df) %>% as.data.frame()
+head(tidycor)
+```
+
+
+```{r}
+ggplot(NBAfinalawards, aes(`MVP Position`, champwinratio, color = `MVP status`)) + geom_point() + ggtitle("Status of MVPs")
+ggplot(NBAfinalawards, aes(`Champ-Wins`,champwinratio, color = `MVP Position`)) + geom_bar(stat = "summary", fun.y = "mean")+ geom_errorbar(stat = "summary") + geom_point() + ggtitle("NBA Champions") + scale_x_log10()  
+
+```
+
+The champions that win have the highest championship win ratio. It also seems that the guard position reaches the most NBA finals but does not win the most. The center position MVP has actually won the most. It also seems that centers reach the finals the most while getting the most regular season wins according to the second graph.
+
+
+```{r}
+library(cluster)
+pam1 <- NBAfinalawards %>% pam(k=3)
+pam1
+pamclust<-NBAfinalawards %>% mutate(cluster=as.factor(pam1$clustering))
+pamclust %>% ggplot(aes(champwinratio,`Champ-Wins`,color=`MVP Position`)) + geom_point()
+```         
+The guard positions have the highest championship win ratios.

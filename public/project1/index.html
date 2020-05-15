@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Abbas Antaria" />
+    <meta name="description" content="Describe your website">
+    <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico">
+    <title>Project 1</title>
+    <meta name="generator" content="Hugo 0.70.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../blog/">BLOG</a></li>
+        
+        <li><a href="../projects/">PROJECTS</a></li>
+        
+        <li><a href="../resume.pdf">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../project1/">Project 1</a></strong>
+          </h3>
+        </div>
+        <div class="blog-title">
+          <h4>
+          May 13, 2020
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+</div>
+<div id="the-data-sets-i-have-chosen-are-all-related-to-the-nba.-i-thought-it-would-be-very-interesting-if-i-were-to-gather-data-regarding-past-nba-champions.-i-found-these-data-online-through-different-websites.-i-wanted-to-find-associations-regarding-awards-that-were-given-that-year-in-regard-to-who-the-champions-were.-this-information-is-interesting-to-me-because-i-have-always-been-a-huge-basketball-fan." class="section level2">
+<h2>The data sets I have chosen are all related to the NBA. I thought it would be very interesting if I were to gather data regarding past NBA Champions. I found these data online through different websites. I wanted to find associations regarding awards that were given that year in regard to who the champions were. This information is interesting to me because I have always been a huge basketball fan.</h2>
+<pre class="r"><code>library(readxl)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(knitr)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✔ tibble  2.1.3     ✔ purrr   0.3.3
+## ✔ tidyr   1.0.2     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>NBA_Finals&lt;-read_excel(&quot;NBA Finals.xlsx&quot;)
+NBA_Awards&lt;-read_excel(&quot;NBA Awards.xlsx&quot;)
+NBA_Finals</code></pre>
+<pre><code>## # A tibble: 62 x 7
+##     Year `NBA Champion` `Champ-Wins` `Champ-Losses` Loser `Loser-Wins`
+##    &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1  1956 Philadelphia …           45             27 Fort…           37
+##  2  1957 Boston Celtics           44             28 St. …           34
+##  3  1958 St. Louis Haw…           41             31 Bost…           49
+##  4  1959 Boston Celtics           52             20 Minn…           33
+##  5  1960 Boston Celtics           59             16 St. …           46
+##  6  1961 Boston Celtics           57             22 St. …           51
+##  7  1962 Boston Celtics           60             20 Los …           54
+##  8  1963 Boston Celtics           58             22 Los …           53
+##  9  1964 Boston Celtics           59             21 San …           48
+## 10  1965 Boston Celtics           62             18 Los …           49
+## # … with 52 more rows, and 1 more variable: `Loser-Losses` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>NBA_Awards</code></pre>
+<pre><code>## # A tibble: 62 x 9
+##     Year `Western Champi… `Eastern Champi… Result `NBA Champion` `MVP Name`
+##    &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt;     
+##  1  1956 Fort Wayne Pist… Philadelphia Wa… 1–4    Philadelphia … B. Pettit 
+##  2  1957 St. Louis Hawks  Boston Celtics   3–4    Boston Celtics B. Cousy  
+##  3  1958 St. Louis Hawks  Boston Celtics   4–2    St. Louis Haw… B. Russell
+##  4  1959 Minneapolis Lak… Boston Celtics   0–4    Boston Celtics B. Pettit 
+##  5  1960 St. Louis Hawks  Boston Celtics   3–4    Boston Celtics W. Chambe…
+##  6  1961 St. Louis Hawks  Boston Celtics   1–4    Boston Celtics B. Russell
+##  7  1962 Los Angeles Lak… Boston Celtics   3–4    Boston Celtics B. Russell
+##  8  1963 Los Angeles Lak… Boston Celtics   2–4    Boston Celtics B. Russell
+##  9  1964 San Francisco W… Boston Celtics   1–4    Boston Celtics O. Robert…
+## 10  1965 Los Angeles Lak… Boston Celtics   1–4    Boston Celtics B. Russell
+## # … with 52 more rows, and 3 more variables: `MVP Position` &lt;chr&gt;, `MVP
+## #   Team` &lt;chr&gt;, `MVP status` &lt;chr&gt;</code></pre>
+<pre class="r"><code>NBA_Finals%&gt;%pivot_wider(names_from=&quot;NBA Champion&quot;,values_from=&quot;Year&quot;)</code></pre>
+<pre><code>## # A tibble: 62 x 23
+##    `Champ-Wins` `Champ-Losses` Loser `Loser-Wins` `Loser-Losses`
+##           &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;          &lt;dbl&gt;
+##  1           45             27 Fort…           37             35
+##  2           44             28 St. …           34             38
+##  3           41             31 Bost…           49             23
+##  4           52             20 Minn…           33             39
+##  5           59             16 St. …           46             29
+##  6           57             22 St. …           51             28
+##  7           60             20 Los …           54             26
+##  8           58             22 Los …           53             27
+##  9           59             21 San …           48             32
+## 10           62             18 Los …           49             31
+## # … with 52 more rows, and 18 more variables: `Philadelphia Warriors` &lt;dbl&gt;,
+## #   `Boston Celtics` &lt;dbl&gt;, `St. Louis Hawks` &lt;dbl&gt;, `Philadelphia
+## #   76ers` &lt;dbl&gt;, `New York Knicks` &lt;dbl&gt;, `Milwaukee Bucks` &lt;dbl&gt;, `Los
+## #   Angeles Lakers` &lt;dbl&gt;, `Golden State Warriors` &lt;dbl&gt;, `Portland Trail
+## #   Blazers` &lt;dbl&gt;, `Washington Bullets` &lt;dbl&gt;, `Seattle SuperSonics` &lt;dbl&gt;,
+## #   `Detroit Pistons` &lt;dbl&gt;, `Chicago Bulls` &lt;dbl&gt;, `Houston Rockets` &lt;dbl&gt;,
+## #   `San Antonio Spurs` &lt;dbl&gt;, `Miami Heat` &lt;dbl&gt;, `Dallas Mavericks` &lt;dbl&gt;,
+## #   `Cleveland Cavaliers` &lt;dbl&gt;</code></pre>
+<p>## I untidied the data by using pivot wider and tidied again by using pivot longer.</p>
+<pre class="r"><code>NBA_Finals %&gt;% full_join(NBA_Awards)</code></pre>
+<pre><code>## Joining, by = c(&quot;Year&quot;, &quot;NBA Champion&quot;)</code></pre>
+<pre><code>## # A tibble: 62 x 14
+##     Year `NBA Champion` `Champ-Wins` `Champ-Losses` Loser `Loser-Wins`
+##    &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1  1956 Philadelphia …           45             27 Fort…           37
+##  2  1957 Boston Celtics           44             28 St. …           34
+##  3  1958 St. Louis Haw…           41             31 Bost…           49
+##  4  1959 Boston Celtics           52             20 Minn…           33
+##  5  1960 Boston Celtics           59             16 St. …           46
+##  6  1961 Boston Celtics           57             22 St. …           51
+##  7  1962 Boston Celtics           60             20 Los …           54
+##  8  1963 Boston Celtics           58             22 Los …           53
+##  9  1964 Boston Celtics           59             21 San …           48
+## 10  1965 Boston Celtics           62             18 Los …           49
+## # … with 52 more rows, and 8 more variables: `Loser-Losses` &lt;dbl&gt;, `Western
+## #   Champion` &lt;chr&gt;, `Eastern Champion` &lt;chr&gt;, Result &lt;chr&gt;, `MVP Name` &lt;chr&gt;,
+## #   `MVP Position` &lt;chr&gt;, `MVP Team` &lt;chr&gt;, `MVP status` &lt;chr&gt;</code></pre>
+<pre class="r"><code>NBAfinalawards &lt;- NBA_Finals %&gt;% full_join(NBA_Awards)</code></pre>
+<pre><code>## Joining, by = c(&quot;Year&quot;, &quot;NBA Champion&quot;)</code></pre>
+<p>No variables in this join were dropped. I chose this join because I want all the variables to be included in the joined dataset.</p>
+<pre class="r"><code>NBAfinalawards  %&gt;% filter(`MVP status`==&quot;Champion&quot;)</code></pre>
+<pre><code>## # A tibble: 23 x 14
+##     Year `NBA Champion` `Champ-Wins` `Champ-Losses` Loser `Loser-Wins`
+##    &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1  1957 Boston Celtics           44             28 St. …           34
+##  2  1961 Boston Celtics           57             22 St. …           51
+##  3  1962 Boston Celtics           60             20 Los …           54
+##  4  1963 Boston Celtics           58             22 Los …           53
+##  5  1965 Boston Celtics           62             18 Los …           49
+##  6  1967 Philadelphia …           68             13 San …           44
+##  7  1970 New York Knic…           60             22 Los …           46
+##  8  1971 Milwaukee Buc…           66             16 Balt…           42
+##  9  1980 Los Angeles L…           60             22 Phil…           59
+## 10  1983 Philadelphia …           65             17 Los …           58
+## # … with 13 more rows, and 8 more variables: `Loser-Losses` &lt;dbl&gt;, `Western
+## #   Champion` &lt;chr&gt;, `Eastern Champion` &lt;chr&gt;, Result &lt;chr&gt;, `MVP Name` &lt;chr&gt;,
+## #   `MVP Position` &lt;chr&gt;, `MVP Team` &lt;chr&gt;, `MVP status` &lt;chr&gt;</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% arrange(`Champ-Wins`)</code></pre>
+<pre><code>## # A tibble: 62 x 14
+##     Year `NBA Champion` `Champ-Wins` `Champ-Losses` Loser `Loser-Wins`
+##    &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+##  1  1999 San Antonio S…           37             13 New …           27
+##  2  1958 St. Louis Haw…           41             31 Bost…           49
+##  3  1957 Boston Celtics           44             28 St. …           34
+##  4  1978 Washington Bu…           44             38 Seat…           47
+##  5  1956 Philadelphia …           45             27 Fort…           37
+##  6  2012 Miami Heat               46             20 Okla…           48
+##  7  1995 Houston Rocke…           47             35 Orla…           57
+##  8  1969 Boston Celtics           48             34 Los …           55
+##  9  1975 Golden State …           48             34 Wash…           60
+## 10  1977 Portland Trai…           49             33 Phil…           50
+## # … with 52 more rows, and 8 more variables: `Loser-Losses` &lt;dbl&gt;, `Western
+## #   Champion` &lt;chr&gt;, `Eastern Champion` &lt;chr&gt;, Result &lt;chr&gt;, `MVP Name` &lt;chr&gt;,
+## #   `MVP Position` &lt;chr&gt;, `MVP Team` &lt;chr&gt;, `MVP status` &lt;chr&gt;</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% select(Year,`NBA Champion`,`MVP Name`,`MVP Team`)</code></pre>
+<pre><code>## # A tibble: 62 x 4
+##     Year `NBA Champion`        `MVP Name`     `MVP Team`           
+##    &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;          &lt;chr&gt;                
+##  1  1956 Philadelphia Warriors B. Pettit      Saint Louis Hawks    
+##  2  1957 Boston Celtics        B. Cousy       Boston Celtics       
+##  3  1958 St. Louis Hawks       B. Russell     Boston Celtics       
+##  4  1959 Boston Celtics        B. Pettit      Saint Louis Hawks    
+##  5  1960 Boston Celtics        W. Chamberlain Philadelphia Warriors
+##  6  1961 Boston Celtics        B. Russell     Boston Celtics       
+##  7  1962 Boston Celtics        B. Russell     Boston Celtics       
+##  8  1963 Boston Celtics        B. Russell     Boston Celtics       
+##  9  1964 Boston Celtics        O. Robertson   Cincinnati Royals    
+## 10  1965 Boston Celtics        B. Russell     Boston Celtics       
+## # … with 52 more rows</code></pre>
+<pre class="r"><code>NBAfinalawards$`Champ-Wins` &lt;- as.numeric(NBAfinalawards$`Champ-Wins`)
+NBAfinalawards &lt;- NBAfinalawards %&gt;% mutate(champwinratio = `Champ-Wins`/ (`Champ-Wins` + `Champ-Losses`))
+
+NBAfinalawards %&gt;% summarize(mean(`Champ-Wins`))                                            </code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `mean(\`Champ-Wins\`)`
+##                    &lt;dbl&gt;
+## 1                   58.1</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% summarize(sd(`Champ-Wins`))                                            </code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `sd(\`Champ-Wins\`)`
+##                  &lt;dbl&gt;
+## 1                 7.54</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% summarize(max(`Champ-Wins`))  </code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `max(\`Champ-Wins\`)`
+##                   &lt;dbl&gt;
+## 1                    72</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% filter(`NBA Champion`== &quot;Los Angeles Lakers&quot;) %&gt;% summarize(mean(`Champ-Wins`))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `mean(\`Champ-Wins\`)`
+##                    &lt;dbl&gt;
+## 1                   61.6</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% group_by(`MVP Team`) %&gt;% summarize(median(champwinratio))</code></pre>
+<pre><code>## # A tibble: 22 x 2
+##    `MVP Team`            `median(champwinratio)`
+##    &lt;chr&gt;                                   &lt;dbl&gt;
+##  1 Baltimore Bullets                       0.585
+##  2 Boston Celtics                          0.738
+##  3 Buffalo Braves                          0.585
+##  4 Chicago Bulls                           0.756
+##  5 Cincinnati Royals                       0.738
+##  6 Cleveland Cavaliers                     0.744
+##  7 Dallas Mavericks                        0.707
+##  8 Golden State Warriors                   0.756
+##  9 Houston Rockets                         0.695
+## 10 Los Angeles Lakers                      0.75 
+## # … with 12 more rows</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% group_by(`MVP Position`) %&gt;% summarize(mean(champwinratio))</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   `MVP Position` `mean(champwinratio)`
+##   &lt;chr&gt;                          &lt;dbl&gt;
+## 1 Center                         0.699
+## 2 Forward                        0.737
+## 3 Guard                          0.747</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% group_by(`NBA Champion`,Loser) %&gt;% summarize(median(champwinratio))</code></pre>
+<pre><code>## # A tibble: 44 x 3
+## # Groups:   NBA Champion [18]
+##    `NBA Champion` Loser                  `median(champwinratio)`
+##    &lt;chr&gt;          &lt;chr&gt;                                    &lt;dbl&gt;
+##  1 Boston Celtics Houston Rockets                          0.787
+##  2 Boston Celtics Los Angeles Lakers                       0.738
+##  3 Boston Celtics Milwaukee Bucks                          0.683
+##  4 Boston Celtics Minneapolis Lakers                       0.722
+##  5 Boston Celtics Phoenix Suns                             0.659
+##  6 Boston Celtics San Francisco Warriors                   0.738
+##  7 Boston Celtics St. Louis Hawks                          0.722
+##  8 Chicago Bulls  Los Angeles Lakers                       0.744
+##  9 Chicago Bulls  Phoenix Suns                             0.695
+## 10 Chicago Bulls  Portland Trail Blazers                   0.817
+## # … with 34 more rows</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% summarize(max(`Loser-Wins`))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `max(\`Loser-Wins\`)`
+##                   &lt;dbl&gt;
+## 1                    73</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% summarize(min(`Champ-Wins`))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `min(\`Champ-Wins\`)`
+##                   &lt;dbl&gt;
+## 1                    37</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% filter(`MVP Name` == &quot;S. Curry&quot;) %&gt;% summarize(max(`Champ-Wins`))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `max(\`Champ-Wins\`)`
+##                   &lt;dbl&gt;
+## 1                    67</code></pre>
+<pre class="r"><code>NBAfinalawards %&gt;% filter(`MVP Name` == &quot;S. Curry&quot;) %&gt;% summarize(mean(`Champ-Wins`))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `mean(\`Champ-Wins\`)`
+##                    &lt;dbl&gt;
+## 1                     62</code></pre>
+<p>In the first function, I found what mean number of regular season wins was for a NBA champion. In the second function, I found out what the standard deviation of regular seaason wins was for NBA champion. In the third function, I found out what the maximum number of regular season wins was for a NBA Champion. In the fourth function, I found the mean number of wins for the Lakers whent they won a championship. In the fifth function, I found the median winratio for every MVP Team. In the sixth function, I found the winratio for championships in every MVP position which were guards. I also found that the Celtics had the highest championship win ratio. The most wins for a losing team was 73 games in 2016. The least number of wins for a championship team was 37.</p>
+<pre class="r"><code>df &lt;- NBAfinalawards %&gt;% select_if(is.numeric)
+cor(df)</code></pre>
+<pre><code>##                     Year  Champ-Wins Champ-Losses  Loser-Wins Loser-Losses
+## Year           1.0000000  0.27295698  -0.20727994  0.43692275  -0.43748818
+## Champ-Wins     0.2729570  1.00000000  -0.74422388  0.40434660  -0.05216915
+## Champ-Losses  -0.2072799 -0.74422388   1.00000000  0.02081767   0.06125185
+## Loser-Wins     0.4369227  0.40434660   0.02081767  1.00000000  -0.78089921
+## Loser-Losses  -0.4374882 -0.05216915   0.06125185 -0.78089921   1.00000000
+## champwinratio  0.2504473  0.87847182  -0.97163779  0.12823123  -0.06470612
+##               champwinratio
+## Year             0.25044734
+## Champ-Wins       0.87847182
+## Champ-Losses    -0.97163779
+## Loser-Wins       0.12823123
+## Loser-Losses    -0.06470612
+## champwinratio    1.00000000</code></pre>
+<pre class="r"><code>tidycor &lt;- cor(df) %&gt;% as.data.frame()
+head(tidycor)</code></pre>
+<pre><code>##                     Year  Champ-Wins Champ-Losses  Loser-Wins Loser-Losses
+## Year           1.0000000  0.27295698  -0.20727994  0.43692275  -0.43748818
+## Champ-Wins     0.2729570  1.00000000  -0.74422388  0.40434660  -0.05216915
+## Champ-Losses  -0.2072799 -0.74422388   1.00000000  0.02081767   0.06125185
+## Loser-Wins     0.4369227  0.40434660   0.02081767  1.00000000  -0.78089921
+## Loser-Losses  -0.4374882 -0.05216915   0.06125185 -0.78089921   1.00000000
+## champwinratio  0.2504473  0.87847182  -0.97163779  0.12823123  -0.06470612
+##               champwinratio
+## Year             0.25044734
+## Champ-Wins       0.87847182
+## Champ-Losses    -0.97163779
+## Loser-Wins       0.12823123
+## Loser-Losses    -0.06470612
+## champwinratio    1.00000000</code></pre>
+<pre class="r"><code>ggplot(NBAfinalawards, aes(`MVP Position`, champwinratio, color = `MVP status`)) + geom_point() + ggtitle(&quot;Status of MVPs&quot;)</code></pre>
+<p><img src="../project1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(NBAfinalawards, aes(`Champ-Wins`,champwinratio, color = `MVP Position`)) + geom_bar(stat = &quot;summary&quot;, fun.y = &quot;mean&quot;)+ geom_errorbar(stat = &quot;summary&quot;) + geom_point() + ggtitle(&quot;NBA Champions&quot;) + scale_x_log10()  </code></pre>
+<pre><code>## Warning: Ignoring unknown parameters: fun.y</code></pre>
+<pre><code>## No summary function supplied, defaulting to `mean_se()`
+## No summary function supplied, defaulting to `mean_se()`</code></pre>
+<p><img src="../project1_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p>The champions that win have the highest championship win ratio. It also seems that the guard position reaches the most NBA finals but does not win the most. The center position MVP has actually won the most. It also seems that centers reach the finals the most while getting the most regular season wins according to the second graph.</p>
+<pre class="r"><code>library(cluster)
+pam1 &lt;- NBAfinalawards %&gt;% pam(k=3)</code></pre>
+<pre><code>## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion
+
+## Warning in data.matrix(x): NAs introduced by coercion</code></pre>
+<pre class="r"><code>pam1</code></pre>
+<pre><code>## Medoids:
+##      ID Year NBA Champion Champ-Wins Champ-Losses Loser Loser-Wins Loser-Losses
+## [1,]  9 1964           NA         59           21    NA         48           32
+## [2,] 34 1989           NA         63           19    NA         57           25
+## [3,] 50 2005           NA         59           23    NA         54           28
+##      Western Champion Eastern Champion Result MVP Name MVP Position MVP Team
+## [1,]               NA               NA     NA       NA           NA       NA
+## [2,]               NA               NA     NA       NA           NA       NA
+## [3,]               NA               NA     NA       NA           NA       NA
+##      MVP status champwinratio
+## [1,]         NA     0.7375000
+## [2,]         NA     0.7682927
+## [3,]         NA     0.7195122
+## Clustering vector:
+##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 2 2 1 2 2 2 2 2 2 2 2 2 2 2 2
+## [39] 2 3 2 2 2 3 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## Objective function:
+##    build     swap 
+## 20.55976 19.97377 
+## 
+## Available components:
+##  [1] &quot;medoids&quot;    &quot;id.med&quot;     &quot;clustering&quot; &quot;objective&quot;  &quot;isolation&quot; 
+##  [6] &quot;clusinfo&quot;   &quot;silinfo&quot;    &quot;diss&quot;       &quot;call&quot;       &quot;data&quot;</code></pre>
+<pre class="r"><code>pamclust&lt;-NBAfinalawards %&gt;% mutate(cluster=as.factor(pam1$clustering))
+pamclust %&gt;% ggplot(aes(champwinratio,`Champ-Wins`,color=`MVP Position`)) + geom_point()</code></pre>
+<p><img src="../project1_files/figure-html/unnamed-chunk-6-1.png" width="672" /> The guard positions have the highest championship win ratios.</p>
+</div>
+
+              <hr>
+              <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div>
+            </div>
+          </div>
+          <hr>
+        <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+        </div>
+      </div>
+      
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../js/docs.min.js"></script>
+<script src="../js/main.js"></script>
+
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

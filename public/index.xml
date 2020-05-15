@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Portfolio Project 3</title>
+    <link>/</link>
+    <description>Recent content on Portfolio Project 3</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Wed, 13 May 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>My New Post</title>
+      <link>/blog/my-new-post/</link>
+      <pubDate>Fri, 15 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/my-new-post/</guid>
+      <description>  #This is a python code chunk x=[&amp;#39;p&amp;#39;, &amp;#39;y&amp;#39;, &amp;#39;t&amp;#39;, &amp;#39;h&amp;#39;, &amp;#39;o&amp;#39;, &amp;#39;n&amp;#39;] x[2:4] ## [&amp;#39;t&amp;#39;, &amp;#39;h&amp;#39;] library(reticulate) #this is an R code chunk py$x ## [1] &amp;quot;p&amp;quot; &amp;quot;y&amp;quot; &amp;quot;t&amp;quot; &amp;quot;h&amp;quot; &amp;quot;o&amp;quot; &amp;quot;n&amp;quot; </description>
+    </item>
+    
+    <item>
+      <title>Project 1</title>
+      <link>/project1/</link>
+      <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project1/</guid>
+      <description>Introduction  The data sets I have chosen are all related to the NBA. I thought it would be very interesting if I were to gather data regarding past NBA Champions. I found these data online through different websites. I wanted to find associations regarding awards that were given that year in regard to who the champions were. This information is interesting to me because I have always been a huge basketball fan.</description>
+    </item>
+    
+    <item>
+      <title>Project 2</title>
+      <link>/project2/</link>
+      <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project2/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+When you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>/projects/</guid>
+      <description>Projects   Here is Project 1
+  Here is Project 2
+  </description>
+    </item>
+    
+  </channel>
+</rss>

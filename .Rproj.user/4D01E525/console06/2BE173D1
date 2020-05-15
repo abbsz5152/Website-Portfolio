@@ -1,0 +1,21 @@
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ [K]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ git init
+Initialized empty Git repository in /stor/home/aa74425/Portfolio Project 3/.git/
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ las -[K[K[K[Ks -a
+ [0m[01;34m.[0m             [01;34mcontent[0m   index.Rmd                    [01;34m.Rproj.user[0m
+ [01;34m..[0m            [01;34mdata[0m     'Portfolio Project 3.Rproj'   [01;34mstatic[0m
+ config.toml   [01;34m.git[0m      [01;34mpublic[0m                       [01;34mthemes[0m
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ git add.
+git: 'add.' is not a git command. See 'git --help'.
+
+The most similar command is
+	add
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ git commit-[K[K[K[K[K[K[K[K[K[K[Kls
+ config.toml   [0m[01;34mdata[0m       'Portfolio Project 3.Rproj'   [01;34mstatic[0m
+ [01;34mcontent[0m       index.Rmd   [01;34mpublic[0m                       [01;34mthemes[0m
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ git init
+Reinitialized existing Git repository in /stor/home/aa74425/Portfolio Project 3/.git/
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$  ls -a
+ [0m[01;34m.[0m             [01;34mcontent[0m   index.Rmd                    [01;34m.Rproj.user[0m
+ [01;34m..[0m            [01;34mdata[0m     'Portfolio Project 3.Rproj'   [01;34mstatic[0m
+ config.toml   [01;34m.git[0m      [01;34mpublic[0m                       [01;34mthemes[0m
+]0;/stor/home/aa74425/Portfolio Project 3]0;aa74425@educcomp01: ~/Portfolio Project 3[01;32maa74425@educcomp01[00m:[01;34m~/Portfolio Project 3[00m$ git add .

@@ -1,0 +1,230 @@
+---
+title: "Project 2"
+output: html_document
+date: '2020-05-13'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE,fig.align="center",warning=FALSE,message=FALSE,fig.width=8, fig.height=5, linewidth=60)
+options(tibble.width = 100,width = 100)
+library(tidyverse)
+ library(ggplot2) 
+library(knitr) 
+library(tidyverse)
+ library(readxl) 
+library(dplyr)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+The dataset talks about NBA champions and the finals matchups. The variable, year, explains what year every finals match up took place. The variable, NBA Champion, tells who the winner of the NBA finals was that year. The variable, Champ-wins, tells how many regular season wins the winner of the NBA finals had. The variable, Champ-losses, tells how many regular season losses the winner of the NBA finals had. The variable, loser, tells who the lost the NBA finals that year. The variable, loser-wins, tells how many regular season wins the loser of the NBA final had. The variable, loser-losses, tells how many regular season losses the loser of the NBA finals had. The variable, MVP position, tells what position the player that won MVP was. The variable, MVP team, tells what team the MVP of that season was on. There are 62 observations of each variable.
+
+```{R}
+library(mvtnorm)
+NBAfinalawards2 <- read_excel("NBAfinalawards2.xlsx")
+# Ho: For both Champion wins and Champion losses, means for each MVP Team are equal.
+# Ha: For at least one variable, at least one MVP Team mean is different.
+man1 <- manova(cbind(ChampWins,ChampLosses)~MVPPosition, data = NBAfinalawards2)
+summary(man1)
+summary.aov(man1)
+
+NBAfinalawards2 %>% group_by(MVPPosition) %>% summarize(mean(ChampWins), mean(ChampLosses))
+
+
+pairwise.t.test(NBAfinalawards2$ChampLosses,NBAfinalawards2$MVPPosition,
+                p.adj="none")
+
+
+ggplot(NBAfinalawards2, aes(x = ChampWins, y = LoserWins)) + geom_point(alpha = .5) + geom_density_2d(h=2) + coord_fixed() + facet_wrap(~MVPPosition)
+
+
+```
+The overall MANOVA is  significant which means that the mean Champion wins and mean Champion losses for each MVP position is not equal. 
+After running the one way Anova for each variable, the ChampWins variable is not signficant and the ChampLosses variable is significant. Univariate ANOVAs for each dependent variable were conducted as follow-up tests to the MANOVA, using the Bonferroni method for controlling Type I error rates for multiple comparisons. The univariate ANOVAs for ChampLosses was statistically significant.
+Post Hoc analysis was performed and significant difference was found betweent the center and forward and then the center and guard.
+6 Tests were performed so .05/6 = .008.
+Significant even after adjusting for multiple comparisions as bonferroni alpha = .008.
+Probability of Type I error is .265. (1-.95^6).
+Multivariate normality was met.
+
+```{R}
+library(vegan)
+dists <- NBAfinalawards2%>%select(ChampWins,ChampLosses)
+adonis(dists ~ NBAChampion, data=NBAfinalawards2)
+
+
+SST<- sum(dists^2)/150
+SSW<-NBAfinalawards2%>%group_by(NBAChampion)%>%select(ChampWins,ChampLosses)%>%
+do(d=dist(.[2:3],"euclidean"))%>%ungroup()%>%summarize(sum(d[[1]]^2)/50 + sum(d[[2]]^2)/50+sum(d[[3]]^2)/50)%>%pull
+F_obs<-((SST-SSW)/2)/(SSW/147)   
+
+Fs<-replicate(1000,{new<-NBAfinalawards2%>%mutate(NBAChampion=sample(NBAChampion)) #permute the species vector
+
+SSW<-new%>%group_by(NBAChampion)%>%select(ChampWins,ChampLosses)%>%
+do(d=dist(.[2:3],"euclidean"))%>%ungroup()%>%
+summarize(sum(d[[1]]^2)/50 + sum(d[[2]]^2)/50+ sum(d[[3]]^2)/50)%>%pull
+((SST-SSW)/2)/(SSW/147) #calculate new F on randomized data
+})
+
+{hist(Fs,prob = T); abline(v=F_obs, col="red", add=T)}
+mean(Fs>F_obs)
+```
+Ho: For both Champion wins and Champion losses, means for each MVP Team are equal.
+Ha: For at least one variable, at least one MVP Team mean is different. The p value is greater than .05 so the null is not rejected. The means of each MVP team are equal. The F statistic is 241.84.
+
+
+```{R}
+#Ho: Controlling for Champwins, LoserWins does not explain variation in NBAChamp.
+#Ha: Controlling for LoserWins, Champwins does not explain variation in NBAChamp.
+
+fit<-lm(ChampLosses~MVPPosition+ChampWins, data=NBAfinalawards2)
+summary(fit)
+mean(NBAfinalawards2$ChampWins)
+data.frame(NBAfinalawards2$ChampWins)
+data.frame(ChampLosses_C=NBAfinalawards2$ChampWins-mean(NBAfinalawards2$ChampWins))
+NBAfinalawards2$ChampWins_C <- NBAfinalawards2$ChampWins-mean(NBAfinalawards2$ChampWins)
+fit1<-lm(ChampLosses~MVPPosition+ChampWins_C, data=NBAfinalawards2)
+summary(fit1)
+qplot(x = ChampWins, y = ChampLosses, color = MVPPosition, data = NBAfinalawards2) +
+stat_smooth(method = "lm", se = FALSE, fullrange = TRUE)
+resids<-fit$residuals; fitvals<-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, col="red")
+ggplot()+geom_histogram(aes(resids),bins=20)
+library(sandwich)
+library(lmtest)
+fit<-lm(ChampLosses~MVPPosition*ChampWins, data=NBAfinalawards2)
+bptest(fit)
+summary(fit)$coef[,1:2]
+coeftest(fit, vcov= vcovHC(fit))[,1:2]
+
+
+
+fit2<-lm(ChampLosses~MVPPosition*ChampWins, data=NBAfinalawards2)
+summary(fit2)
+
+x=seq(-5,5,length.out=1000)
+y=1+2*x+rnorm(1000)
+dat<-data.frame(x,y)
+breaks <- seq(min(dat$x), max(dat$x), len=8)
+ggplot(dat, aes(x, y)) +
+geom_point(alpha=.3) +
+theme_bw()+
+geom_vline(xintercept=breaks, lty=2,color='gray50')
+
+
+boot_dat<- sample_frac(dat, replace=T)
+
+samp_distn<-replicate(5000, {
+boot_dat <- sample_frac(NBAfinalawards2, replace=T) #bootstrap your data
+fit4 <- lm(ChampLosses~MVPPosition+ChampWins, data=boot_dat) #fit model
+coef(fit) #save coefs
+})
+## Estimated SEs
+samp_distn %>% t %>% as.data.frame %>% summarize_all(sd)
+
+
+
+# your code here
+```
+
+The linearity and homoskedasticity assumption looks ok. The normality assumption looks ok. When controlling for Champ wins , forwards have a predicted loss of 48 less then centers. When controlling for champ wins, guards have a predicted loss of 9 more less than centers. Predicted center loss is 76. When controlling for position, champ wins is .91 less then champ losses. Heteroskedasticity is assesed with robust standard errors. The robust standard errors are bigger.
+0.78 of the variation in ChampLosses is explained by the overall model.
+
+```{R}
+library(tidyverse)
+library(lmtest)
+
+data1<- NBAfinalawards2%>%mutate(y=ifelse(NBAfinalawards2$NBAChampion==NBAfinalawards2$MVPTeam,1,0))
+fit5 <- glm(y~MVPPosition+NBAChampion, data = data1)
+coeftest(fit5)
+prob <- predict(fit5, type = "response")
+table(predict=as.numeric(prob>.5),truth=data1$y)%>%addmargins
+
+data1$logit<-predict(fit5,type="link")
+data1%>%ggplot()+geom_density(aes(logit,color=y,fill=y), alpha=.4)+
+  theme(legend.position=c(.85,.85))+geom_vline(xintercept=0)+xlab("predictor (logit)")
+
+library(plotROC)
+ROCplot<-ggplot(data1)+geom_roc(aes(d=y,m=prob), n.cuts=0)+
+geom_segment(aes(x=0,xend=1,y=0,yend=1),lty=2)
+ROCplot
+calc_auc(ROCplot)
+
+class_diag <- function(probs,truth){
+#CONFUSION MATRIX: CALCULATE ACCURACY, TPR, TNR, PPV
+tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+acc=sum(diag(tab))/sum(tab)
+sens=tab[2,2]/colSums(tab)[2]
+spec=tab[1,1]/colSums(tab)[1]
+ppv=tab[2,2]/rowSums(tab)[2]
+if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+#CALCULATE EXACT AUC
+ord<-order(probs, decreasing=TRUE)
+probs <- probs[ord]; truth <- truth[ord]
+TPR=cumsum(truth)/max(1,sum(truth))
+FPR=cumsum(!truth)/max(1,sum(!truth))
+dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+n <- length(TPR)
+auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+data.frame(acc,sens,spec,ppv,auc)
+} 
+class_diag(prob,data1$y)
+
+set.seed(1234)
+k=10 
+
+data2<-data1[sample(nrow(data1)),] #randomly order rows
+folds<-cut(seq(1:nrow(data1)),breaks=k,labels=F) #create folds
+
+diags<-NULL
+for(i in 1:k){
+  train<-data2[folds!=i,] 
+  test<-data2[folds==i,]
+  truth<-test$y
+  
+  fit5<-glm(y~MVPPosition,data=train,family="binomial")
+  probs2<-predict(fit5,newdata = test,type="response")
+
+}
+
+class_diag(prob,data1$y)
+
+# your code here
+```
+Controlling for everything else, going up 1 for forward position increases log odds by -.12.Controlling for everything else, going up 1 for guard position increases log odds by .008.Controlling for everything else, going up 1 for chicagobulls increases log odds by .26.Controlling for everything else, going up 1 for cleveland cavaliers  increases log odds by -.44.Controlling for everything else, going up 1 for dallas mavericks position increases log odds by -.44.Controlling for everything else, going up 1 for detroit pistons log odds by -.40.Controlling for everything else, going up 1 for warriors increases log odds by -.11.Controlling for everything else, going up 1 for houston rockets increases log odds by .05.Controlling for everything else, going up 1 for lakers  increases log odds by -.12.Controlling for everything else, going up 1 for miami heat  increases log odds by .3.Controlling for everything else, going up 1 for bucks  increases log odds by .55. Controlling for everything else, going up 1 for knicks  increases log odds by .05. Controlling for everything else, going up 1 for 76ers  increases log odds by -.31.Controlling for everything else, going up 1 for blazers  increases log odds by -.44. Controlling for everything else, going up 1 for spurs increases log odds by -.14.Controlling for everything else, going up 1 for supersonics increases log odds by -.44. Controlling for everything else, going up 1 for hawks increases log odds by -.44.Controlling for everything else, going up 1 for bullets position increases log odds by -.44.
+
+Sensitivity is 9/23 = .39
+Specificity is 36/39 = .92
+Precision is 9/12 = .75
+
+The AUC is .78 which is fair.
+
+
+After performing 10 fold CV, acc is .64, sens is .5, spec is .84, and auc is .76.
+
+
+
+
+
+```{R}
+library(glmnet)
+y<-as.matrix(data1$y) #grab response
+x<-model.matrix(y~.,data=data1)[,-1]
+cv <- cv.glmnet(x,y)
+{plot(cv$glmnet.fit, "lambda", label=TRUE); abline(v = log(cv$lambda.1se)); abline(v = log(cv$lambda.min),lty=2)}
+cv<-cv.glmnet(x,y,family="binomial") %>% na.omit
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+
+```
+Champ losses and the Boston Celtics team are the most predicitive variables.
+
+
+
+
+
